@@ -21,10 +21,31 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Book {
+  """id del libro"""
+  id: Int!
+
+  """nombre del libro"""
+  name: String!
+
+  """descripción del libro"""
+  description: String!
+
+  """fecha de creación del libro"""
+  created_at: DateTime!
+
+  """facha de actualización del libro"""
+  updated_at: DateTime!
+
+  """autores del libro"""
+  authors: [Author!]!
+}
+
 type Query {
-  authors(paginationInput: PaginationInput! = {page: 1, size: 10}): [Author!]!
-  filterAuthors(paginationInput: PaginationInput! = {page: 1, size: 10}, name: String!): [Author!]!
+  authors(paginationInput: PaginationInput! = {page: 1, size: 10}, name: String): [Author!]!
   author(id: Int!): Author!
+  books(paginationInput: PaginationInput! = {page: 1, size: 10}, searchBookInput: SearchBookInput): [Book!]!
+  book(id: Int!): Book!
 }
 
 input PaginationInput {
@@ -35,15 +56,29 @@ input PaginationInput {
   size: Int! = 10
 }
 
+input SearchBookInput {
+  """nombre del libro"""
+  name: String
+
+  """descripcion del libro"""
+  description: String
+
+  """nombre de los autores"""
+  authors: [String!]
+}
+
 type Mutation {
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
   removeAuthor(id: Int!): Author!
+  createBook(createBookInput: CreateBookInput!): Book!
+  updateBook(updateBookInput: UpdateBookInput!): Book!
+  removeBook(id: Int!): Book!
 }
 
 input CreateAuthorInput {
   """nombre del author"""
-  name: String!
+  name: String
 }
 
 input UpdateAuthorInput {
@@ -51,5 +86,30 @@ input UpdateAuthorInput {
   name: String!
 
   """id del author"""
+  id: Int!
+}
+
+input CreateBookInput {
+  """nombre del libro"""
+  name: String!
+
+  """descripción del libro"""
+  description: String!
+
+  """id de los autores"""
+  authors: [Int!]
+}
+
+input UpdateBookInput {
+  """nombre del libro"""
+  name: String!
+
+  """descripción del libro"""
+  description: String!
+
+  """id de los autores"""
+  authors: [Int!]!
+
+  """id del libro"""
   id: Int!
 }
