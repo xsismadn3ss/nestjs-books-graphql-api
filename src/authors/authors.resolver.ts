@@ -25,19 +25,7 @@ export class AuthorsResolver {
       new PaginationPipe(),
     )
     paginationInput: PaginationInput,
-  ) {
-    return this.authorsService.findAll(paginationInput);
-  }
-
-  @Query(() => [Author])
-  filterAuthors(
-    @Args(
-      'paginationInput',
-      { defaultValue: { page: 1, size: 10 } },
-      new PaginationPipe(),
-    )
-    paginationInput: PaginationInput,
-    @Args('name') name: string,
+    @Args('name', { nullable: true }) name?: string,
   ) {
     return this.authorsService.findAll(paginationInput, name);
   }
