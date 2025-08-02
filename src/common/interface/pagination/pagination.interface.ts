@@ -1,11 +1,13 @@
-import { IsNumber, Max, Min } from 'class-validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
-export class Pagination {
-  @IsNumber()
-  @Min(1)
-  page: number;
-  @IsNumber()
-  @Min(1)
-  @Max(100, { message: 'The maximum size is 100' })
-  size: number;
+@InputType()
+export class PaginationInput {
+  @Field(() => Int, { description: 'pagina actual', defaultValue: 1 })
+  page: number = 1;
+
+  @Field(() => Int, {
+    description: 'cantidad de registros por pagina',
+    defaultValue: 10,
+  })
+  size: number = 10;
 }
