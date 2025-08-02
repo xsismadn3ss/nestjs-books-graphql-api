@@ -1,14 +1,14 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { Pagination } from '../../interface/pagination/pagination.interface';
+import { PaginationInput } from '../../interface/pagination/pagination.interface';
 
 @Injectable()
 export class PaginationPipe implements PipeTransform {
-  transform(value: Pagination) {
-    const page = value.page ?? 1;
-    const size = value.size ?? 10;
+  transform(value: PaginationInput) {
+    console.log(value);
+    const { page, size } = value;
 
     // formatear page y size para usar en prisma
     const skip = (page - 1) * size;
-    return { page: skip, size } as Pagination;
+    return { page: skip, size } as PaginationInput;
   }
 }

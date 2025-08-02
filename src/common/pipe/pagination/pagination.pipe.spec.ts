@@ -1,5 +1,5 @@
 import { PaginationPipe } from './pagination.pipe';
-import { Pagination } from '../../interface/pagination/pagination.interface';
+import { PaginationInput } from '../../interface/pagination/pagination.interface';
 
 describe('PaginationPipe', () => {
   it('should be defined', () => {
@@ -10,7 +10,7 @@ describe('PaginationPipe', () => {
     const page = 1;
     const size = 10;
 
-    const spectedResult: Pagination = {
+    const spectedResult: PaginationInput = {
       page: (page - 1) * size,
       size,
     };
