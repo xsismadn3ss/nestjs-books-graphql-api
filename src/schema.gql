@@ -1,0 +1,55 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Author {
+  """id del author"""
+  id: Int!
+
+  """nombre del author"""
+  name: String!
+
+  """fecha de creacion del author"""
+  created_at: DateTime!
+
+  """fecha de actualizacion del author"""
+  updated_at: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  authors(paginationInput: PaginationInput! = {page: 1, size: 10}): [Author!]!
+  filterAuthors(paginationInput: PaginationInput! = {page: 1, size: 10}, name: String!): [Author!]!
+  author(id: Int!): Author!
+}
+
+input PaginationInput {
+  """pagina actual"""
+  page: Int! = 1
+
+  """cantidad de registros por pagina"""
+  size: Int! = 10
+}
+
+type Mutation {
+  createAuthor(createAuthorInput: CreateAuthorInput!): Author!
+  updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
+  removeAuthor(id: Int!): Author!
+}
+
+input CreateAuthorInput {
+  """nombre del author"""
+  name: String!
+}
+
+input UpdateAuthorInput {
+  """nombre del author"""
+  name: String!
+
+  """id del author"""
+  id: Int!
+}
