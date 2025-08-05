@@ -21,6 +21,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Message {
+  """mensaje de error"""
+  message: String!
+}
+
 type Book {
   """id del libro"""
   id: Int!
@@ -43,9 +48,9 @@ type Book {
 
 type Query {
   authors(paginationInput: PaginationInput! = {page: 1, size: 10}, name: String): [Author!]!
-  author(id: Int!): Author!
+  author(id: Int!): AuthorResult!
   books(paginationInput: PaginationInput! = {page: 1, size: 10}, searchBookInput: SearchBookInput): [Book!]!
-  book(id: Int!): Book!
+  book(id: Int!): BookResult!
 }
 
 input PaginationInput {
@@ -55,6 +60,8 @@ input PaginationInput {
   """cantidad de registros por pagina"""
   size: Int! = 10
 }
+
+union AuthorResult = Author | Message
 
 input SearchBookInput {
   """nombre del libro"""
@@ -67,13 +74,15 @@ input SearchBookInput {
   authors: [String!]
 }
 
+union BookResult = Book | Message
+
 type Mutation {
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
-  removeAuthor(id: Int!): Author!
+  removeAuthor(id: Int!): Message!
   createBook(createBookInput: CreateBookInput!): Book!
   updateBook(updateBookInput: UpdateBookInput!): Book!
-  removeBook(id: Int!): Book!
+  removeBook(id: Int!): Message!
 }
 
 input CreateAuthorInput {
