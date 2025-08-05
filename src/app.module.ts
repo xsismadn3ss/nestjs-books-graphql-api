@@ -14,6 +14,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       driver: ApolloDriver,
       autoSchemaFile: 'src/schema.gql',
       graphiql: true,
+      playground: true,
+      introspection: true,
     }),
   ],
   controllers: [AppController],
