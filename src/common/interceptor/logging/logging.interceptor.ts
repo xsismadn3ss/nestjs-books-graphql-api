@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -22,6 +22,6 @@ export class LoggingInterceptor implements NestInterceptor {
     console.log(`🧾 Args:`, args);
     console.log(`👤 User:`, user);
 
-    return next.handle()
+    return next.handle();
   }
 }
