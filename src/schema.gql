@@ -113,3 +113,7 @@ input UpdateBookInput {
   """id del libro"""
   id: Int!
 }
+
+type Subscription {
+  authorAdded: Author!
+}
