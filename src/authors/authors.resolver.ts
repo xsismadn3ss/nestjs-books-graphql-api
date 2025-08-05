@@ -1,18 +1,18 @@
 import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
-import { PubSub } from 'graphql-subscriptions';
 import { AuthorsService } from './authors.service';
 import { Author } from './entities/author.entity';
 import { CreateAuthorInput } from './dto/create-author.input';
 import { UpdateAuthorInput } from './dto/update-author.input';
 import { PaginationInput } from '../common/interface/pagination/pagination.interface';
 import { PaginationPipe } from '../common/pipe/pagination/pagination.pipe';
+import { PubSubService } from '../common/service/pub-sub/pub-sub.service';
 
 @Resolver(() => Author)
 export class AuthorsResolver {
   constructor(
 
     private readonly authorsService: AuthorsService,
-    private readonly pubSub: PubSub,
+    private readonly pubSub: PubSubService,
   ) { }
 
   @Mutation(() => Author)
