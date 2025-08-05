@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAuthorInput } from './dto/create-author.input';
 import { UpdateAuthorInput } from './dto/update-author.input';
 import { PrismaService } from '../common/service/prisma/prisma.service';
 import { PaginationInput } from '../common/interface/pagination/pagination.interface';
+import { Author } from './entities/author.entity';
 
 @Injectable()
 export class AuthorsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   create(createAuthorInput: CreateAuthorInput) {
     return this.prismaService.author.create({
@@ -23,10 +24,14 @@ export class AuthorsService {
     });
   }
 
-  findOne(id: number) {
-    return this.prismaService.author.findUnique({
+  async findOne(id: number): Promise<Author> {
+    const data = await this.prismaService.author.findUnique({
       where: { id },
     });
+    if (data === null) {
+      throw new NotFoundException("author not found")
+    }
+    return new Author(data as Author);
   }
 
   update(updateAuthorInput: UpdateAuthorInput) {
@@ -40,6 +45,7 @@ export class AuthorsService {
   }
 
   async remove(id: number) {
+    await this.findOne(id)
     await this.prismaService.author.delete({
       where: { id },
     });
