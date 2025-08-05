@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Subscription,
+} from '@nestjs/graphql';
 import { BooksService } from './books.service';
 import { Book } from './entities/book.entity';
 import { CreateBookInput } from './dto/create-book.input';
@@ -7,13 +14,16 @@ import { PaginationPipe } from '../common/pipe/pagination/pagination.pipe';
 import { PaginationInput } from '../common/interface/pagination/pagination.interface';
 import { SearchBookInput } from './dto/search-book.input';
 import { PubSubService } from '../common/service/pub-sub/pub-sub.service';
+import { UseInterceptors } from '@nestjs/common';
+import { LoggingInterceptor } from '../common/interceptor/logging/logging.interceptor';
 
+@UseInterceptors(LoggingInterceptor)
 @Resolver(() => Book)
 export class BooksResolver {
   constructor(
     private readonly booksService: BooksService,
     private readonly pubSub: PubSubService,
-  ) { }
+  ) {}
 
   @Mutation(() => Book)
   createBook(@Args('createBookInput') createBookInput: CreateBookInput) {
