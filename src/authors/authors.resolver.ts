@@ -1,4 +1,5 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { AuthorsService } from './authors.service';
 import { Author } from './entities/author.entity';
 import { CreateAuthorInput } from './dto/create-author.input';
@@ -8,13 +9,19 @@ import { PaginationPipe } from '../common/pipe/pagination/pagination.pipe';
 
 @Resolver(() => Author)
 export class AuthorsResolver {
-  constructor(private readonly authorsService: AuthorsService) {}
+  constructor(
+
+    private readonly authorsService: AuthorsService,
+    private readonly pubSub: PubSub,
+  ) { }
 
   @Mutation(() => Author)
-  createAuthor(
+  async createAuthor(
     @Args('createAuthorInput') createAuthorInput: CreateAuthorInput,
   ) {
-    return this.authorsService.create(createAuthorInput);
+    const newAuthor = await this.authorsService.create(createAuthorInput);
+    this.pubSub.publish('authorAdded', { authorAdded: newAuthor });
+    return newAuthor;
   }
 
   @Query(() => [Author], { name: 'authors' })
@@ -45,5 +52,10 @@ export class AuthorsResolver {
   @Mutation(() => Author)
   removeAuthor(@Args('id', { type: () => Int }) id: number) {
     return this.authorsService.remove(id);
+  }
+
+  @Subscription(() => Author)
+  authorAdded() {
+    return this.pubSub.asyncIterableIterator('authorAdded');
   }
 }
