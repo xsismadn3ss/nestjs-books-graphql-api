@@ -10,7 +10,7 @@ describe('BooksResolver', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [BooksResolver, BooksService],
-      imports:[PubSubModule, PrismaModule],
+      imports: [PubSubModule, PrismaModule],
     }).compile();
 
     resolver = module.get<BooksResolver>(BooksResolver);

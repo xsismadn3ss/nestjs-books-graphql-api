@@ -8,4 +8,4 @@ import { PubSubModule } from 'src/common/service/pub-sub/pub-sub.module';
   imports: [PrismaModule, PubSubModule],
   providers: [BooksResolver, BooksService],
 })
-export class BooksModule { }
+export class BooksModule {}

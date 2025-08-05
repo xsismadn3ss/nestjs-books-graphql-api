@@ -17,8 +17,8 @@ describe('PubSubService', () => {
   });
 
   it('should publish and subscribe', () => {
-    const data = { "messages": "test" }
-    Promise.resolve(service.publish("test", data))
+    const data = { messages: 'test' };
+    Promise.resolve(service.publish('test', data));
 
     // obtener el iterador
     const iterator = service.asyncIterableIterator('test');
@@ -27,13 +27,13 @@ describe('PubSubService', () => {
     // verificar que el valor es el esperado
     const value = next.then((res) => {
       expect(res.value).toEqual(data);
-    })
+    });
     // verificar que el iterador está terminado
     const done = next.then((res) => {
       expect(res.done).toBe(true);
-    })
+    });
     // validar resultados
-    expect(value).resolves.toEqual(data)
-    expect(done).resolves.toBe(true)
-  })
+    expect(value).resolves.toEqual(data);
+    expect(done).resolves.toBe(true);
+  });
 });
