@@ -16,9 +16,13 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       graphiql: true,
       playground: true,
       introspection: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
     }),
   ],
   controllers: [AppController],
   providers: [AppService],
-})
+}) 
 export class AppModule {}
