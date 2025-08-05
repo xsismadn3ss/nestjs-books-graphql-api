@@ -14,8 +14,10 @@ import { PaginationPipe } from '../common/pipe/pagination/pagination.pipe';
 import { PaginationInput } from '../common/interface/pagination/pagination.interface';
 import { SearchBookInput } from './dto/search-book.input';
 import { PubSubService } from '../common/service/pub-sub/pub-sub.service';
-import { UseInterceptors } from '@nestjs/common';
+import { NotFoundException, UseInterceptors } from '@nestjs/common';
 import { LoggingInterceptor } from '../common/interceptor/logging/logging.interceptor';
+import { BookResult } from './entities/book-result.entity';
+import { Message } from '../common/entity/message.entity';
 
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => Book)
@@ -46,9 +48,17 @@ export class BooksResolver {
     return this.booksService.findAll(paginationInput, searchBookInput);
   }
 
-  @Query(() => Book, { name: 'book' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.booksService.findOne(id);
+  @Query(() => BookResult, { name: 'book' })
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    try {
+      const data = await this.booksService.findOne(id);
+      return new Book(data);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return new Message({ message: 'book not found' });
+      }
+      throw error;
+    }
   }
 
   @Mutation(() => Book)
@@ -56,9 +66,16 @@ export class BooksResolver {
     return this.booksService.update(updateBookInput);
   }
 
-  @Mutation(() => Book)
-  removeBook(@Args('id', { type: () => Int }) id: number) {
-    return this.booksService.remove(id);
+  @Mutation(() => Message)
+  async removeBook(@Args('id', { type: () => Int }) id: number) {
+    try {
+      await this.booksService.remove(id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return new Message({ message: 'book not found' });
+      }
+      throw error;
+    }
   }
 
   @Subscription(() => Book)
