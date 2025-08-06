@@ -24,19 +24,19 @@ export class AuthorsResolver {
   constructor(
     private readonly authorsService: AuthorsService,
     private readonly pubSub: PubSubService,
-  ) { }
+  ) {}
 
   @Mutation(() => Author)
   async createAuthor(
     @Args('createAuthorInput') createAuthorInput: CreateAuthorInput,
   ) {
     const newAuthor = await this.authorsService.create(createAuthorInput);
-    this.pubSub.publish('authorAdded', { authorAdded: newAuthor });
+    await this.pubSub.publish('authorAdded', { authorAdded: newAuthor });
     return newAuthor;
   }
 
   @Query(() => [Author], { name: 'authors' })
-  findAll(
+  async findAll(
     @Args(
       'paginationInput',
       { defaultValue: { page: 1, size: 10 } },
@@ -56,12 +56,12 @@ export class AuthorsResolver {
       if (error instanceof NotFoundException) {
         return new Message({ message: 'author not found' });
       }
-      throw error
+      throw error;
     }
   }
 
   @Mutation(() => Author)
-  updateAuthor(
+  async updateAuthor(
     @Args('updateAuthorInput') updateAuthorInput: UpdateAuthorInput,
   ) {
     return this.authorsService.update(updateAuthorInput);
@@ -70,13 +70,13 @@ export class AuthorsResolver {
   @Mutation(() => Message)
   async removeAuthor(@Args('id', { type: () => Int }) id: number) {
     try {
-      await this.authorsService.remove(id)
-      return new Message({ message: "author deleted" })
+      await this.authorsService.remove(id);
+      return new Message({ message: 'author deleted' });
     } catch (error) {
       if (error instanceof NotFoundException) {
         return new Message({ message: 'author not found' });
       }
-      throw error
+      throw error;
     }
   }
 
