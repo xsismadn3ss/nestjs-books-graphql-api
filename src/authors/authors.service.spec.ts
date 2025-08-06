@@ -11,7 +11,7 @@ describe('AuthorsService', () => {
       name: 'testAuthor',
       created_at: new Date(),
       updated_at: new Date(),
-    }
+    },
   ];
 
   beforeEach(async () => {
@@ -37,7 +37,7 @@ describe('AuthorsService', () => {
 
   it('should find all authors', async () => {
     const data = await service.findAll({ page: 1, size: 10 });
-    expect(data).toBeDefined()
+    expect(data).toBeDefined();
   });
 
   it('should find author', async () => {
@@ -53,7 +53,7 @@ describe('AuthorsService', () => {
 
     expect(data).toBeDefined();
     expect(data).not.toBeNull();
-    expect(data.name).toBe("nameChanged")
+    expect(data.name).toBe('nameChanged');
   });
 
   it('should delete author', async () => {
