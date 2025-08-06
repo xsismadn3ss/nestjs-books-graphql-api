@@ -4,9 +4,10 @@ import { UpdateAuthorInput } from './dto/update-author.input';
 import { PrismaService } from '../common/service/prisma/prisma.service';
 import { PaginationInput } from '../common/interface/pagination/pagination.interface';
 import { Author } from './entities/author.entity';
+import { IAuthorsService } from './authors.interface';
 
 @Injectable()
-export class AuthorsService {
+export class AuthorsService implements IAuthorsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
