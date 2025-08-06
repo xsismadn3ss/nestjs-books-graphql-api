@@ -5,9 +5,10 @@ import { PrismaService } from '../common/service/prisma/prisma.service';
 import { PaginationInput } from '../common/interface/pagination/pagination.interface';
 import { SearchBookInput } from './dto/search-book.input';
 import { Book } from './entities/book.entity';
+import { IBooksService } from './books.interface';
 
 @Injectable()
-export class BooksService {
+export class BooksService implements IBooksService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createBookInput: CreateBookInput) {
