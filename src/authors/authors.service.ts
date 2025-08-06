@@ -7,15 +7,16 @@ import { Author } from './entities/author.entity';
 
 @Injectable()
 export class AuthorsService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
-  create(createAuthorInput: CreateAuthorInput) {
-    return this.prismaService.author.create({
+  async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
+    const data: Author = await this.prismaService.author.create({
       data: createAuthorInput,
     });
+    return new Author(data);
   }
 
-  findAll(pagination: PaginationInput, name?: string) {
+  findAll(pagination: PaginationInput, name?: string): Promise<Author[]> {
     const { page, size } = pagination;
     return this.prismaService.author.findMany({
       where: name ? { name: { contains: name } } : undefined,
@@ -25,16 +26,16 @@ export class AuthorsService {
   }
 
   async findOne(id: number): Promise<Author> {
-    const data = await this.prismaService.author.findUnique({
+    const data: Author | null = await this.prismaService.author.findUnique({
       where: { id },
     });
     if (data === null) {
-      throw new NotFoundException("author not found")
+      throw new NotFoundException('author not found');
     }
-    return new Author(data as Author);
+    return new Author(data);
   }
 
-  update(updateAuthorInput: UpdateAuthorInput) {
+  async update(updateAuthorInput: UpdateAuthorInput): Promise<Author> {
     return this.prismaService.author.update({
       where: { id: updateAuthorInput.id },
       data: {
@@ -44,8 +45,8 @@ export class AuthorsService {
     });
   }
 
-  async remove(id: number) {
-    await this.findOne(id)
+  async remove(id: number): Promise<void> {
+    await this.findOne(id);
     await this.prismaService.author.delete({
       where: { id },
     });
